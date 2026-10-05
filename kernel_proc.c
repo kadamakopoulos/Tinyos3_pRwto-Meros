@@ -2,6 +2,7 @@
 #include "kernel_cc.h"
 #include "kernel_proc.h"
 #include "kernel_streams.h"
+#include "kernel_threads.h"
 /* 
  The process table and related system calls:
  - Exec
@@ -257,7 +258,7 @@ finish:
 }
 
 
-static Pid_t wait_for_any_child(,int* status)
+static Pid_t wait_for_any_child(int* status)
 {
   Pid_t cpid;
 
