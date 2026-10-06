@@ -94,7 +94,7 @@ Mutex active_threads_spinlock = MUTEX_INIT;
 #define SYSTEM_PAGE_SIZE (1 << 12)
 
 /* The memory allocated for the TCB must be a multiple of SYSTEM_PAGE_SIZE */
-#define THREAD_TCB_SIZE 
+#define THREAD_TCB_SIZE \
 	(((sizeof(TCB) + SYSTEM_PAGE_SIZE - 1) / SYSTEM_PAGE_SIZE) * SYSTEM_PAGE_SIZE)
 
 #define THREAD_SIZE (THREAD_TCB_SIZE + THREAD_STACK_SIZE)
@@ -173,6 +173,7 @@ TCB* spawn_thread(PCB* pcb, void (*func)())
 
 	tcb->its = QUANTUM;
 	tcb->rts = QUANTUM;
+	tcb->prioritySCHED = QUEUES-1;
 	tcb->last_cause = SCHED_IDLE;
 	tcb->curr_cause = SCHED_IDLE;
 
@@ -273,7 +274,7 @@ static void sched_register_timeout(TCB* tcb, TimerDuration timeout)
 static void sched_queue_add(TCB* tcb)
 {
 	/* Insert at the end of the scheduling list */
-	rlist_push_back(&SCHED, &tcb->sched_node);
+	rlist_push_back(&SCHED[tcb->prioritySCHED], &tcb->sched_node);
 
 	/* Restart possibly halted cores */
 	cpu_core_restart_one();
@@ -333,7 +334,7 @@ static TCB* sched_queue_select(TCB* current)
 {
 	int nextPriority = QUEUES-1;
 
-	   for (int i = nextPriority-1; i >= 0; i--) 
+	   for (int i = QUEUES-1; i >= 0; i--) 
 	   {
 	   	 if (!is_rlist_empty(&SCHED[i]))
 	   	 {
@@ -343,7 +344,7 @@ static TCB* sched_queue_select(TCB* current)
 	   }
 
 	/* Get the head of the SCHED list */
-	rlnode* sel = rlist_pop_front(&SCHED);
+	rlnode* sel = rlist_pop_front(&SCHED[nextPriority]);
 
 	TCB* next_thread = sel->tcb; /* When the list is empty, this is NULL */
 
@@ -439,7 +440,7 @@ void yield(enum SCHED_CAUSE cause)
 		{
 			while(!is_rlist_empty(&SCHED[i])){
 				rlnode* node = rlist_pop_front(&SCHED[i]);
-				node->tcb->prioritySCED++;                       //Increases the priority of the one that has a next value
+				node->tcb->prioritySCHED++;                       //Increases the priority of the one that has a next value
 				rlist_push_back(&SCHED[i+1], node);
 			}
 
@@ -590,7 +591,7 @@ static void idle_thread()
 void initialize_scheduler()
 {
 
-	for (int i = QUEUES-1; i >= 0; i++)
+	for (int i = QUEUES-1; i >= 0; i--)
 	{
 		rlnode_init(&SCHED[i], NULL); 
 	}
