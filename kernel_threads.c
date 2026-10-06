@@ -3,6 +3,7 @@
 #include "kernel_sched.h"
 #include "kernel_proc.h"
 #include "kernel_threads.h"
+#inlcude "kernel_streams.h"
 #include "kernel_cc.h"
 
 
@@ -29,7 +30,7 @@ PTCB*intialize_PTCB(PTCB*ptcb,Task task,int argl,void* args){
 }
 
 
-void void start_ptcb_thread(){
+void start_ptcb_thread(){
  int exitval;//timi epistrofis tis task
 
  PTCB* ptcb = cur_thread()->ptcb;//pairnei to PTCB tou trexontos thread
@@ -56,7 +57,7 @@ Tid_t sys_CreateThread(Task task, int argl, void* args)
     rlist_push_back(&CURPROC->ptcb_list, &ptcb->ptcb_list_node); //prosthetoume to ptcb sti lista twn threads tis diergasias
     CURPROC->thread_count++;              //auxanetai afou pige stin lista
 
-    ptcb->tcb=spawn_thread(CURPROC,start_sub_threads);//dimiourgei neo tcb pou tha ektelei start_sub_threads
+    ptcb->tcb=spawn_thread(CURPROC,start_ptcb_threads);//dimiourgei neo tcb pou tha ektelei start_sub_threads
     ptcb->tcb->ptcb=ptcb;//amfidromi sundesi tcb se ptcb
 
     wakeup(ptcb->tcb);
@@ -165,7 +166,7 @@ void sys_ThreadExit(int exitval)
       while(!is_rlist_empty(& curproc ->children_list)){
         rlnode* child = rlist_pop_front(& curproc->children_list);
         child->pcb->parent = initpcb;
-        rlist_push_front(& initpcb->child_exit);
+        rlist_push_front(& initpcb->children_list, child);
       }
 
 
