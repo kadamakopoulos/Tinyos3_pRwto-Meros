@@ -57,7 +57,7 @@ Tid_t sys_CreateThread(Task task, int argl, void* args)
     rlist_push_back(&CURPROC->ptcb_list, &ptcb->ptcb_list_node); //prosthetoume to ptcb sti lista twn threads tis diergasias
     CURPROC->thread_count++;              //auxanetai afou pige stin lista
 
-    ptcb->tcb=spawn_thread(CURPROC,start_ptcb_threads);//dimiourgei neo tcb pou tha ektelei start_sub_threads
+    ptcb->tcb=spawn_thread(CURPROC,start_ptcb_thread);//dimiourgei neo tcb pou tha ektelei start_sub_threads
     ptcb->tcb->ptcb=ptcb;//amfidromi sundesi tcb se ptcb
 
     wakeup(ptcb->tcb);
