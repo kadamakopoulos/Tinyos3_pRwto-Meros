@@ -14,7 +14,7 @@ PTCB*aquire(){
 }
 
 
-PTCB*intialize_PTCB(PTCB*ptcb,Task task,int argl,void* args){
+PTCB*initialize_PTCB(PTCB*ptcb,Task task,int argl,void* args){
   //apothikeusi basikwn stoixeiwn tis diergasias
   ptcb->task=task;
   ptcb->argl=argl;
@@ -52,7 +52,7 @@ Tid_t sys_CreateThread(Task task, int argl, void* args)
 {
   if (task != NULL)//Elegxei an task != NULL
   {
-    PTCB* ptcb = intialize_PTCB(aquire(),task,argl,args);//pairnei elefthero PTCB apo pool (acquire() = malloc-like)
+    PTCB* ptcb = initialize_PTCB(aquire(),task,argl,args);//pairnei elefthero PTCB apo pool (acquire() = malloc-like)
     rlnode_init(&ptcb->ptcb_list_node,ptcb);  //arxikopoiei ton komvo gia tin lista ptcb_list
     rlist_push_back(&CURPROC->ptcb_list, &ptcb->ptcb_list_node); //prosthetoume to ptcb sti lista twn threads tis diergasias
     CURPROC->thread_count++;              //auxanetai afou pige stin lista
