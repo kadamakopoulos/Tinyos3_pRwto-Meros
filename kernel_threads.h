@@ -24,7 +24,7 @@ void start_threads();
 
 PTCB*aquire();
 
-PTCB*intialize_PTCB(PTCB*ptcb,Task task,int argl,void* args);
+PTCB*initialize_PTCB(PTCB*ptcb,Task task,int argl,void* args);
 
 
 #endif
