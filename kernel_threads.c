@@ -3,7 +3,7 @@
 #include "kernel_sched.h"
 #include "kernel_proc.h"
 #include "kernel_threads.h"
-#inlcude "kernel_streams.h"
+#include "kernel_streams.h"
 #include "kernel_cc.h"
 
 
