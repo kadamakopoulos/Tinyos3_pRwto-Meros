@@ -192,7 +192,8 @@ Pid_t sys_Exec(Task call, int argl, void* args)
       newproc->thread_count++;
 
       ptcb->tcb = spawn_thread(newproc, start_main_thread);
-       newproc->main_thread = ptcb->tcb;
+      ptcb->tcb->ptcb = ptcb;
+      newproc->main_thread = ptcb->tcb;
 
     wakeup(ptcb->tcb);
     }
