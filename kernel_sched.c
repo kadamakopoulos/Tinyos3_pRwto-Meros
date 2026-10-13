@@ -479,7 +479,7 @@ void yield(enum SCHED_CAUSE cause)
 		case SCHED_IO://thread has finished its task before the end of the quantum   
 
 			if(current->prioritySCHED < QUEUES-1)
-				current->prioritySCHED=QUEUES++;
+				current->prioritySCHED++;
 		break;
 
 		case SCHED_QUANTUM://thread use a quantum and hasn't finish it's task
