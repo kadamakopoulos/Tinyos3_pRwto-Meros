@@ -4,7 +4,7 @@
 #include "util.h"
 #include "tinyos.h"
 #include "kernel_proc.h"
-#include "kernel_sched"
+#include "kernel_sched.h"
 
 typedef struct process_thread_control_block {
   TCB* tcb;     //to TCB tou thread 
